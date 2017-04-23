@@ -146,12 +146,7 @@
             for(var i = 1; i <= numSnakeSections2-1;i++){
                 game.physics.arcade.collide(snakeHead2, snakeSection[i], collisionHandler, null, this);
             }
-            //checks bullets from snake 1 hitting snake two
-            game.physics.arcade.overlap(bullets, snakeHead2, player2hit, null, this);
-            for(var i =1; i <= numSnakeSections2-1;i++){
-               game.physics.arcade.overlap(bullets, snakeSection2[i], player2hit, null, this);     
-            }
-            
+           
             
             if(gameover){  
                  snakeHead.destroy();
@@ -253,6 +248,15 @@
                     return;
                 }
             }
+             //checks bullets from snake 1 hitting snake two
+            game.physics.arcade.overlap(bullets, snakeHead2, player2hit, null, this);
+            for(var i =1; i <= numSnakeSections2-1;i++){
+               game.physics.arcade.overlap(bullets, snakeSection2[i], player2hit, null, this);     
+            }
+            game.physics.arcade.overlap(bullets2, snakeHead, player1hit, null, this);
+            for(var i =1; i <= numSnakeSections-1;i++){
+               game.physics.arcade.overlap(bullets2, snakeSection[i], player1hit, null, this);     
+            }
 		}
         function collisionHandler (obj1, obj2) {
             game.stage.backgroundColor = '#992d2d';
@@ -264,6 +268,7 @@
         function collisionHandler2 (obj1, obj2) {
             pellet.x = game.world.randomX;
             pellet.y = game.world.randomY;
+            //alert(numSnakeSections);
             snakeSection[numSnakeSections] = game.add.sprite(snakeSection[ numSnakeSections-1].x, snakeSection[ numSnakeSections-1].y, 'body');
             snakeSection[numSnakeSections].anchor.setTo(0.5, 0.5);
             game.physics.enable(snakeSection[numSnakeSections], Phaser.Physics.ARCADE);
@@ -279,13 +284,26 @@
         }
         function player2hit(obj1,obj2){
             //alert("player2hit");
-            alert(numSnakeSections2);
+            //alert(numSnakeSections2);
             if(numSnakeSections2 == 1){
                 gameover = true;
             }else{
                obj2.kill(); 
                 var db =snakeSection2.pop();
                 numSnakeSections2--;
+                db.destroy();
+            }
+            return;
+        }
+        function player1hit(obj1,obj2){
+            //alert("player2hit");
+            //alert(numSnakeSections2);
+            if(numSnakeSections == 1){
+                gameover = true;
+            }else{
+                obj2.kill(); 
+                var db =snakeSection.pop();
+                numSnakeSections--;
                 db.destroy();
             }
             return;
