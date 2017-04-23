@@ -146,7 +146,13 @@
             for(var i = 1; i <= numSnakeSections2-1;i++){
                 game.physics.arcade.collide(snakeHead2, snakeSection[i], collisionHandler, null, this);
             }
-            //te
+            //checks bullets from snake 1 hitting snake two
+            game.physics.arcade.overlap(bullets, snakeHead2, player2hit, null, this);
+            for(var i =1; i <= numSnakeSections2-1;i++){
+               game.physics.arcade.overlap(bullets, snakeSection2[i], player2hit, null, this);     
+            }
+            
+            
             if(gameover){  
                  snakeHead.destroy();
                     pellet.destroy();
@@ -253,7 +259,6 @@
             gameover = true;
             game.stage.backgroundColor = '#992d2d';
                     gameover = true;
-                    snakeHead.destroy();
                     return;
         }
         function collisionHandler2 (obj1, obj2) {
@@ -271,6 +276,19 @@
             snakeSection2[numSnakeSections2].anchor.setTo(0.5, 0.5);
             game.physics.enable(snakeSection2[numSnakeSections2], Phaser.Physics.ARCADE);
             numSnakeSections2++;
+        }
+        function player2hit(obj1,obj2){
+            //alert("player2hit");
+            alert(numSnakeSections2);
+            if(numSnakeSections2 == 1){
+                gameover = true;
+            }else{
+               obj2.kill(); 
+                var db =snakeSection2.pop();
+                numSnakeSections2--;
+                db.destroy();
+            }
+            return;
         }
         function fireBullet () {
         //  To avoid them being allowed to fire too fast we set a time limit
