@@ -15,6 +15,7 @@
             game.load.image('head','/Assests/snakehead.png');
             game.load.image('body','/Assests/body.png');
             game.load.image('bullet','/Assests/bullet.png');
+            game.load.image('pellet','/Assests/pellet.png');
         }
         
         var snakeHead;
@@ -26,6 +27,7 @@
         var bullets;
         var bulletTime = 0;
         var fireButton;
+        var pellet;
         function create() {
                 //  Our bullet group
             bullets = game.add.group();
@@ -37,6 +39,7 @@
             bullets.setAll('outOfBoundsKill', true);
             bullets.setAll('checkWorldBounds', true);
 
+            
             game.physics.startSystem(Phaser.Physics.ARCADE);
             game.world.setBounds(0, 0, 800, 600);
             cursors = game.input.keyboard.createCursorKeys();
@@ -44,7 +47,8 @@
             snakeHead = game.add.sprite(400, 300, 'head');
             snakeHead.anchor.setTo(0.5, 0.5);
             game.physics.enable(snakeHead, Phaser.Physics.ARCADE);
-            
+            pellet = game.add.sprite(game.world.randomX, game.world.randomY, 'pellet');
+            game.physics.enable(pellet,Phaser.Physics.ARCADE);
             for (var i = 1; i <= numSnakeSections-1; i++) {
                 var x = 400 - 25;
                 var y = 300;
@@ -69,7 +73,8 @@
             for(var i = 1; i <= numSnakeSections-1;i++){
                 game.physics.arcade.collide(snakeHead, snakeSection[i], collisionHandler, null, this);
             }
-
+            //check if snake hits pellet
+                game.physics.arcade.collide(snakeHead, pellet, collisionHandler2, null, this);
                 snakeHead.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead.angle, speed));
                 var part = snakePath.pop();
                 part.setTo(snakeHead.x, snakeHead.y);
@@ -106,6 +111,10 @@
 		}
         function collisionHandler (obj1, obj2) {
             game.stage.backgroundColor = '#992d2d';
+        }
+        function collisionHandler2 (obj1, obj2) {
+            pellet.x = game.world.randomX;
+            pellet.y = game.world.randomY;
         }
         function fireBullet () {
 
