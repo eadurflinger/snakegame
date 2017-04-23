@@ -127,7 +127,7 @@
         
         function update() {
             if(onep == 1){
-                alert("First Pass");
+           
                 snakeHead2.body.rotation = -180;
                 
             }
@@ -146,6 +146,7 @@
             for(var i = 1; i <= numSnakeSections2-1;i++){
                 game.physics.arcade.collide(snakeHead2, snakeSection[i], collisionHandler, null, this);
             }
+            //te
             if(gameover){  
                  snakeHead.destroy();
                     pellet.destroy();
