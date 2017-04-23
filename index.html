@@ -28,6 +28,8 @@
         var bulletTime = 0;
         var fireButton;
         var pellet;
+        var maxnumsections = 50;
+        var newbodypart;
         function create() {
                 //  Our bullet group
             bullets = game.add.group();
@@ -60,7 +62,7 @@
                 snakeSection[i].anchor.setTo(0.5, 0.5);
                 game.physics.enable(snakeSection[i], Phaser.Physics.ARCADE);
             }
-            for (var i = 0; i <= numSnakeSections * snakeSpacer; i++) {
+            for (var i = 0; i <= maxnumsections * snakeSpacer; i++) {
                 snakePath[i] = new Phaser.Point(400-i, 300);
             }
             snakeHead.body.velocity.setTo(0,0);
@@ -72,6 +74,7 @@
             // check to see if snake head colides with the body
             for(var i = 1; i <= numSnakeSections-1;i++){
                 game.physics.arcade.collide(snakeHead, snakeSection[i], collisionHandler, null, this);
+                
             }
             //check if snake hits pellet
                 game.physics.arcade.collide(snakeHead, pellet, collisionHandler2, null, this);
@@ -115,6 +118,10 @@
         function collisionHandler2 (obj1, obj2) {
             pellet.x = game.world.randomX;
             pellet.y = game.world.randomY;
+            snakeSection[numSnakeSections] = game.add.sprite(snakeSection[ numSnakeSections-1].x, snakeSection[ numSnakeSections-1].y, 'body');
+            snakeSection[numSnakeSections].anchor.setTo(0.5, 0.5);
+            game.physics.enable(snakeSection[numSnakeSections], Phaser.Physics.ARCADE);
+            numSnakeSections++;
         }
         function fireBullet () {
 
@@ -127,18 +134,22 @@
             if (bullet)
             {
                 //  And fire it
+                //fire up
                 if(snakeHead.body.rotation == -90){
                 bullet.reset(snakeHead.x, snakeHead.y + 8);
                 bullet.body.velocity.y = -400;
                 bulletTime = game.time.now + 200;
+                //fire down    
                 }else if(snakeHead.body.rotation == 90){
                 bullet.reset(snakeHead.x, snakeHead.y + 25);
                 bullet.body.velocity.y = 400;
                 bulletTime = game.time.now + 200;
+                //fire left    
                 }else if(snakeHead.body.rotation == -180){
                 bullet.reset(snakeHead.x-12, snakeHead.y+8);
                 bullet.body.velocity.x = -400;
                 bulletTime = game.time.now + 200;
+                //fire right    
                 }else if(snakeHead.body.rotation == 0){
                 bullet.reset(snakeHead.x+25, snakeHead.y+8);
                 bullet.body.velocity.x = 400;
