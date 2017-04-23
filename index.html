@@ -14,19 +14,33 @@
         function preload() {
             game.load.image('head','/Assests/snakehead.png');
             game.load.image('body','/Assests/body.png');
+            game.load.image('bullet','/Assests/bullet.png');
         }
         
         var snakeHead;
         var snakeSection = new Array();
         var snakePath = new Array();
-        var numSnakeSections = 10;
+        var numSnakeSections = 4;
         var snakeSpacer = 25;
         var speed = 200;
-        
+        var bullets;
+        var bulletTime = 0;
+        var fireButton;
         function create() {
+                //  Our bullet group
+            bullets = game.add.group();
+            bullets.enableBody = true;
+            bullets.physicsBodyType = Phaser.Physics.ARCADE;
+            bullets.createMultiple(30, 'bullet');
+            bullets.setAll('anchor.x', 0.5);
+            bullets.setAll('anchor.y', 1);
+            bullets.setAll('outOfBoundsKill', true);
+            bullets.setAll('checkWorldBounds', true);
+
             game.physics.startSystem(Phaser.Physics.ARCADE);
             game.world.setBounds(0, 0, 800, 600);
             cursors = game.input.keyboard.createCursorKeys();
+            fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             snakeHead = game.add.sprite(400, 300, 'head');
             snakeHead.anchor.setTo(0.5, 0.5);
             game.physics.enable(snakeHead, Phaser.Physics.ARCADE);
@@ -43,7 +57,7 @@
                 game.physics.enable(snakeSection[i], Phaser.Physics.ARCADE);
             }
             for (var i = 0; i <= numSnakeSections * snakeSpacer; i++) {
-                snakePath[i] = new Phaser.Point(400 - i, 300);
+                snakePath[i] = new Phaser.Point(400-i, 300);
             }
             snakeHead.body.velocity.setTo(0,0);
         }
@@ -65,7 +79,7 @@
                     snakeSection[i].y = (snakePath[i * snakeSpacer]).y;
                 }
             //bug: will turn right even if current direction is left
-            if (cursors.right.isDown & snakeHead.body.rotation != 180) {
+            if (cursors.right.isDown & snakeHead.body.rotation != -180) {
 					snakeHead.body.rotation = 0;
 			}
 
@@ -74,12 +88,15 @@
 			}
 
 			if (cursors.left.isDown & snakeHead.body.rotation != 0) {
-					snakeHead.body.rotation = 180;
+					snakeHead.body.rotation = -180;
 			}
 
 			if (cursors.up.isDown & snakeHead.body.rotation != 90){
 					snakeHead.body.rotation = -90;
 			}
+            if (fireButton.isDown){
+                fireBullet();
+            }
             if(snakeHead.x > 800 || snakeHead.x < 0) {
 				game.stage.backgroundColor = '#992d2d';
 			}
@@ -90,6 +107,39 @@
         function collisionHandler (obj1, obj2) {
             game.stage.backgroundColor = '#992d2d';
         }
+        function fireBullet () {
+
+        //  To avoid them being allowed to fire too fast we set a time limit
+        if (game.time.now > bulletTime)
+        {
+        //  Grab the first bullet we can from the pool
+            bullet = bullets.getFirstExists(false);
+
+            if (bullet)
+            {
+                //  And fire it
+                if(snakeHead.body.rotation == -90){
+                bullet.reset(snakeHead.x, snakeHead.y + 8);
+                bullet.body.velocity.y = -400;
+                bulletTime = game.time.now + 200;
+                }else if(snakeHead.body.rotation == 90){
+                bullet.reset(snakeHead.x, snakeHead.y + 25);
+                bullet.body.velocity.y = 400;
+                bulletTime = game.time.now + 200;
+                }else if(snakeHead.body.rotation == -180){
+                bullet.reset(snakeHead.x-12, snakeHead.y+8);
+                bullet.body.velocity.x = -400;
+                bulletTime = game.time.now + 200;
+                }else if(snakeHead.body.rotation == 0){
+                bullet.reset(snakeHead.x+25, snakeHead.y+8);
+                bullet.body.velocity.x = 400;
+                bulletTime = game.time.now + 200;
+                } 
+            }
+        }
+
+        }
+
         function render(){
             
              game.debug.spriteInfo(snakeHead, 32, 32);
