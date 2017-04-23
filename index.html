@@ -30,6 +30,7 @@
         var pellet;
         var maxnumsections = 50;
         var newbodypart;
+        var gameover = false;
         function create() {
                 //  Our bullet group
             bullets = game.add.group();
@@ -69,48 +70,52 @@
         }
         
         function update() {
-             snakeHead.body.velocity.setTo(0,0);
-            snakeHead.body.angularVelocity = 0;
-            // check to see if snake head colides with the body
-            for(var i = 1; i <= numSnakeSections-1;i++){
-                game.physics.arcade.collide(snakeHead, snakeSection[i], collisionHandler, null, this);
+            if(gameover){
                 
-            }
-            //check if snake hits pellet
-                game.physics.arcade.collide(snakeHead, pellet, collisionHandler2, null, this);
-                snakeHead.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead.angle, speed));
-                var part = snakePath.pop();
-                part.setTo(snakeHead.x, snakeHead.y);
-                snakePath.unshift(part);
-                for (var i = 1; i <= numSnakeSections - 1; i++) {
-                    snakeSection[i].x = (snakePath[i * snakeSpacer]).x;
-                    snakeSection[i].y = (snakePath[i * snakeSpacer]).y;
+            }else{
+                snakeHead.body.velocity.setTo(0,0);
+                snakeHead.body.angularVelocity = 0;
+                // check to see if snake head colides with the body
+                for(var i = 1; i <= numSnakeSections-1;i++){
+                    game.physics.arcade.collide(snakeHead, snakeSection[i], collisionHandler, null, this);
+
                 }
-            //bug: will turn right even if current direction is left
-            if (cursors.right.isDown & snakeHead.body.rotation != -180) {
-					snakeHead.body.rotation = 0;
-			}
+                //check if snake hits pellet
+                    game.physics.arcade.collide(snakeHead, pellet, collisionHandler2, null, this);
+                    snakeHead.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead.angle, speed));
+                    var part = snakePath.pop();
+                    part.setTo(snakeHead.x, snakeHead.y);
+                    snakePath.unshift(part);
+                    for (var i = 1; i <= numSnakeSections - 1; i++) {
+                        snakeSection[i].x = (snakePath[i * snakeSpacer]).x;
+                        snakeSection[i].y = (snakePath[i * snakeSpacer]).y;
+                    }
+                //bug: will turn right even if current direction is left
+                if (cursors.right.isDown & snakeHead.body.rotation != -180) {
+                        snakeHead.body.rotation = 0;
+                }
 
-			if (cursors.down.isDown & snakeHead.body.rotation != -90) {
-					snakeHead.body.rotation = 90;
-			}
+                if (cursors.down.isDown & snakeHead.body.rotation != -90) {
+                        snakeHead.body.rotation = 90;
+                }
 
-			if (cursors.left.isDown & snakeHead.body.rotation != 0) {
-					snakeHead.body.rotation = -180;
-			}
+                if (cursors.left.isDown & snakeHead.body.rotation != 0) {
+                        snakeHead.body.rotation = -180;
+                }
 
-			if (cursors.up.isDown & snakeHead.body.rotation != 90){
-					snakeHead.body.rotation = -90;
-			}
-            if (fireButton.isDown){
-                fireBullet();
+                if (cursors.up.isDown & snakeHead.body.rotation != 90){
+                        snakeHead.body.rotation = -90;
+                }
+                if (fireButton.isDown){
+                    fireBullet();
+                }
+                if(snakeHead.x > 1280 || snakeHead.x < 0) {
+                    game.stage.backgroundColor = '#992d2d';
+                }
+                if(snakeHead.y > 768 || snakeHead.y < 0) {
+                    game.stage.backgroundColor = '#992d2d';
+                }
             }
-            if(snakeHead.x > 1280 || snakeHead.x < 0) {
-				game.stage.backgroundColor = '#992d2d';
-			}
-			if(snakeHead.y > 768 || snakeHead.y < 0) {
-				game.stage.backgroundColor = '#992d2d';
-			}
 		}
         function collisionHandler (obj1, obj2) {
             game.stage.backgroundColor = '#992d2d';
