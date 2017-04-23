@@ -137,6 +137,15 @@
             for(var i = 1; i <= numSnakeSections2-1;i++){
                 game.physics.arcade.collide(snakeHead2, snakeSection2[i], collisionHandler, null, this);
             }
+            //checks if player 1 hits player 2
+            game.physics.arcade.collide(snakeHead, snakeHead2, collisionHandler, null, this);
+            for(var i = 1; i <= numSnakeSections2-1;i++){
+                game.physics.arcade.collide(snakeHead, snakeSection2[i], collisionHandler, null, this);
+            }
+            //checks if player 2 hits player 1
+            for(var i = 1; i <= numSnakeSections2-1;i++){
+                game.physics.arcade.collide(snakeHead2, snakeSection[i], collisionHandler, null, this);
+            }
             if(gameover){  
                  snakeHead.destroy();
                     pellet.destroy();
