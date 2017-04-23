@@ -55,7 +55,7 @@
                 game.physics.arcade.collide(snakeHead, snakeSection[i], collisionHandler, null, this);
             }
 
-                snakeHead.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead.angle, 300));
+                snakeHead.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead.angle, 200));
                 var part = snakePath.pop();
                 part.setTo(snakeHead.x, snakeHead.y);
                 snakePath.unshift(part);
