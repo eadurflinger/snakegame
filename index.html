@@ -129,10 +129,13 @@
             if(onep == 1){
                 alert("First Pass");
                 snakeHead2.body.rotation = -180;
-                onep = 0;
+                
             }
             for(var i = 1; i <= numSnakeSections-1;i++){
-                    game.physics.arcade.collide(snakeHead, snakeSection[i], collisionHandler, null, this);
+                game.physics.arcade.collide(snakeHead, snakeSection[i], collisionHandler, null, this);
+            }
+            for(var i = 1; i <= numSnakeSections2-1;i++){
+                game.physics.arcade.collide(snakeHead2, snakeSection2[i], collisionHandler, null, this);
             }
             if(gameover){  
                  snakeHead.destroy();
@@ -166,14 +169,17 @@
                         snakeSection[i].x = (snakePath[i * snakeSpacer]).x;
                         snakeSection[i].y = (snakePath[i * snakeSpacer]).y;
                     }
-                snakeHead2.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead2.angle, speed));
-                    var part2 = snakePath2.pop();
-                    part2.setTo(snakeHead2.x, snakeHead2.y);
-                    snakePath2.unshift(part2);
-                    for (var i = 1; i <= numSnakeSections2 - 1; i++) {
-                        snakeSection2[i].x = (snakePath2[i * snakeSpacer]).x;
-                        snakeSection2[i].y = (snakePath2[i * snakeSpacer]).y;
+                    if(onep != 1){
+                        snakeHead2.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead2.angle, speed));
+                        var part2 = snakePath2.pop();
+                        part2.setTo(snakeHead2.x, snakeHead2.y);
+                        snakePath2.unshift(part2);
+                        for (var i = 1; i <= numSnakeSections2 - 1; i++) {
+                            snakeSection2[i].x = (snakePath2[i * snakeSpacer]).x;
+                            snakeSection2[i].y = (snakePath2[i * snakeSpacer]).y;
+                        }
                     }
+                    onep = 0;
                 //movement turn for player 1
                 if (cursors.right.isDown & snakeHead.body.rotation != -180) {
                         snakeHead.body.rotation = 0;
