@@ -20,46 +20,46 @@
         var snakeSection = new Array();
         var snakePath = new Array();
         var numSnakeSections = 10;
-        var snakeSpacer = 15;
-        var numspawned = 10;
+        var snakeSpacer = 25;
+        
         function create() {
-
             game.physics.startSystem(Phaser.Physics.ARCADE);
-
             game.world.setBounds(0, 0, 800, 600);
-
             cursors = game.input.keyboard.createCursorKeys();
-
             snakeHead = game.add.sprite(400, 300, 'head');
             snakeHead.anchor.setTo(0.5, 0.5);
-
             game.physics.enable(snakeHead, Phaser.Physics.ARCADE);
-            increaseLength();
             
-            for (var i = 0; i <= numSnakeSections * snakeSpacer; i++) {
-                snakePath[i] = new Phaser.Point(400, 300);
+            for (var i = 1; i <= numSnakeSections-1; i++) {
+                var x = 400 - snakeSpacer;
+                var y = 300;
+                if(snakeSection.length != 0) {
+				    x = snakeSection[snakeSection.length-1].x - snakeSpacer;
+				   
+                }
+                snakeSection[i] = game.add.sprite(x, y, 'body');
+                snakeSection[i].anchor.setTo(0.5, 0.5);
+                game.physics.enable(snakeSection[i], Phaser.Physics.ARCADE);
             }
-           
+            for (var i = 0; i <= numSnakeSections * snakeSpacer; i++) {
+                snakePath[i] = new Phaser.Point(400 - i, 300);
+            }
+            snakeHead.body.velocity.setTo(0,0);
         }
         
         function update() {
-            snakeHead.body.velocity.setTo(0,0);
+             snakeHead.body.velocity.setTo(0,0);
             snakeHead.body.angularVelocity = 0;
             // check to see if snake head colides with the body
-            for(var i = 1; i <= numspawned-1;i++){
+            for(var i = 1; i <= numSnakeSections-1;i++){
                 game.physics.arcade.collide(snakeHead, snakeSection[i], collisionHandler, null, this);
             }
             if (cursors.up.isDown) {
-                //spawns body part if not yet have the amount
                 snakeHead.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead.angle, 300));
-
                 var part = snakePath.pop();
-
                 part.setTo(snakeHead.x, snakeHead.y);
-
                 snakePath.unshift(part);
-                
-                for (var i = 1; i <= numspawned - 1; i++) {
+                for (var i = 1; i <= numSnakeSections - 1; i++) {
                     snakeSection[i].x = (snakePath[i * snakeSpacer]).x;
                     snakeSection[i].y = (snakePath[i * snakeSpacer]).y;
                 }
@@ -71,31 +71,8 @@
                 snakeHead.body.angularVelocity = 300;
             }
         }
-        /*function increaseLength (){
-        
-			var x = 400;
-			var y = 300;
-			if(snakeSection.length != 0) {
-				x = snakeSection[snakeSection.length-1].x -snakeSpacer;
-				y = snakeSection[snakeSection.length-1].y + snakeSpacer;
-			}
-			var body = game.add.sprite(x, y, 'body');
-			game.physics.enable(body, Phaser.Physics.ARCADE);
-			
-			snakeSection.push(body);
-		}*/
-        function increaseLength(){
-           for (var i = 1; i <= numspawned-1; i++) {
-                snakeSection[i] = game.add.sprite(400, 300, 'body');
-                snakeSection[i].anchor.setTo(0.5, 0.5);
-                game.physics.enable(snakeSection[i], Phaser.Physics.ARCADE);
-
-            } 
-        }
         function collisionHandler (obj1, obj2) {
-
             game.stage.backgroundColor = '#992d2d';
-
         }
         function render(){
             
