@@ -85,8 +85,14 @@
                     game.physics.arcade.collide(snakeHead, snakeSection[i], collisionHandler, null, this);
 
             }
-            if(gameover){   
-            var t = game.add.text(game.world.centerX, game.world.centerY, text, style);
+            if(gameover){  
+                 snakeHead.destroy();
+                    pellet.destroy();
+                    for (var i = 1; i <= numSnakeSections-1; i++) {
+                        snakeSection[i].destroy();
+                    }
+                    bullets.destroy();
+            var t = game.add.text(game.world.centerX,game.world.centerY, text, style);
             }else{
                 snakeHead.body.velocity.setTo(0,0);
                 snakeHead.body.angularVelocity = 0;
@@ -122,27 +128,14 @@
                     fireBullet();
                 }
                 if(snakeHead.x > 1280 || snakeHead.x < 0) {
+                   
                     game.stage.backgroundColor = '#992d2d';
                     gameover = true;
-                    game.stage.backgroundColor = '#992d2d';
-                    gameover = true;
-                    snakeHead.destroy();
-                    pellet.destroy();
-                    for (var i = 1; i <= numSnakeSections-1; i++) {
-                        snakeSection[i].destroy();
-                    }
-                    
-                    return;
+                   return;
                 }
                 if(snakeHead.y > 768 || snakeHead.y < 0) {
                     game.stage.backgroundColor = '#992d2d';
-                    gameover = true;
-                    snakeHead.destroy();
-                    pellet.destroy();
-                    for (var i = 1; i <= numSnakeSections-1; i++) {
-                        snakeSection[i].destroy();
-                    }
-                    
+                    gameover = true;       
                     return;
                 }
             }
@@ -153,11 +146,6 @@
             game.stage.backgroundColor = '#992d2d';
                     gameover = true;
                     snakeHead.destroy();
-                    pellet.destroy();
-                    for (var i = 1; i <= numSnakeSections-1; i++) {
-                        snakeSection[i].destroy();
-                    }
-                    
                     return;
         }
         function collisionHandler2 (obj1, obj2) {
