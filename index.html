@@ -21,6 +21,7 @@
         var snakePath = new Array();
         var numSnakeSections = 10;
         var snakeSpacer = 25;
+        var speed = 200;
         
         function create() {
             game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -55,7 +56,7 @@
                 game.physics.arcade.collide(snakeHead, snakeSection[i], collisionHandler, null, this);
             }
 
-                snakeHead.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead.angle, 200));
+                snakeHead.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead.angle, speed));
                 var part = snakePath.pop();
                 part.setTo(snakeHead.x, snakeHead.y);
                 snakePath.unshift(part);
