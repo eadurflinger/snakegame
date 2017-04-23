@@ -46,17 +46,19 @@
                 snakePath[i] = new Phaser.Point(400, 300);
             }
            
+            //snakeHead.body.velocity.setTo(0,0);
+            
         }
         
         function update() {
             
-            snakeHead.body.velocity.setTo(0,0);
-            snakeHead.body.angularVelocity = 0;
+            
+            //snakeHead.body.angularVelocity = 0;
             // check to see if snake head colides with the body
             for(var i = 1; i <= numSnakeSections-1;i++){
                 game.physics.arcade.collide(snakeHead, snakeSection[i], collisionHandler, null, this);
             }
-            if (cursors.up.isDown) {
+
                 snakeHead.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead.angle, 300));
 
                 var part = snakePath.pop();
@@ -69,13 +71,23 @@
                     snakeSection[i].x = (snakePath[i * snakeSpacer]).x;
                     snakeSection[i].y = (snakePath[i * snakeSpacer]).y;
                 }
-            }
-            if (cursors.left.isDown) {
-                snakeHead.body.angularVelocity = -300;
-            }
-            else if(cursors.right.isDown) {
-                snakeHead.body.angularVelocity = 300;
-            }
+            
+            //bug: will turn right even if current direction is left
+            if (cursors.right.isDown & snakeHead.body.rotation != 180) {
+					snakeHead.body.rotation = 0;
+			}
+
+			if (cursors.down.isDown & snakeHead.body.rotation != -90) {
+					snakeHead.body.rotation = 90;
+			}
+
+			if (cursors.left.isDown & snakeHead.body.rotation != 0) {
+					snakeHead.body.rotation = 180;
+			}
+
+			if (cursors.up.isDown & snakeHead.body.rotation != 90){
+					snakeHead.body.rotation = -90;
+			}
         }
         function collisionHandler (obj1, obj2) {
 
