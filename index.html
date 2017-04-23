@@ -34,13 +34,8 @@
             snakeHead.anchor.setTo(0.5, 0.5);
 
             game.physics.enable(snakeHead, Phaser.Physics.ARCADE);
+            increaseLength();
             
-            for (var i = 1; i <= numspawned-1; i++) {
-                snakeSection[i] = game.add.sprite(400, 300, 'body');
-                snakeSection[i].anchor.setTo(0.5, 0.5);
-                game.physics.enable(snakeSection[i], Phaser.Physics.ARCADE);
-
-            }
             for (var i = 0; i <= numSnakeSections * snakeSpacer; i++) {
                 snakePath[i] = new Phaser.Point(400, 300);
             }
@@ -48,7 +43,6 @@
         }
         
         function update() {
-            
             snakeHead.body.velocity.setTo(0,0);
             snakeHead.body.angularVelocity = 0;
             // check to see if snake head colides with the body
@@ -56,6 +50,7 @@
                 game.physics.arcade.collide(snakeHead, snakeSection[i], collisionHandler, null, this);
             }
             if (cursors.up.isDown) {
+                //spawns body part if not yet have the amount
                 snakeHead.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead.angle, 300));
 
                 var part = snakePath.pop();
@@ -75,6 +70,27 @@
             else if(cursors.right.isDown) {
                 snakeHead.body.angularVelocity = 300;
             }
+        }
+        /*function increaseLength (){
+        
+			var x = 400;
+			var y = 300;
+			if(snakeSection.length != 0) {
+				x = snakeSection[snakeSection.length-1].x -snakeSpacer;
+				y = snakeSection[snakeSection.length-1].y + snakeSpacer;
+			}
+			var body = game.add.sprite(x, y, 'body');
+			game.physics.enable(body, Phaser.Physics.ARCADE);
+			
+			snakeSection.push(body);
+		}*/
+        function increaseLength(){
+           for (var i = 1; i <= numspawned-1; i++) {
+                snakeSection[i] = game.add.sprite(400, 300, 'body');
+                snakeSection[i].anchor.setTo(0.5, 0.5);
+                game.physics.enable(snakeSection[i], Phaser.Physics.ARCADE);
+
+            } 
         }
         function collisionHandler (obj1, obj2) {
 
