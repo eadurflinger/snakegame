@@ -29,7 +29,7 @@
             game.load.image('body2','/Assests/body2.png');
             game.load.image('bullet2','/Assests/bullet2.png');
         }
-        
+        var onep = 1;
         var snakeHead;
         var snakeHead2;
         var snakeSection2 = new Array();
@@ -126,6 +126,11 @@
         }
         
         function update() {
+            if(onep == 1){
+                alert("First Pass");
+                snakeHead2.body.rotation = -180;
+                onep = 0;
+            }
             for(var i = 1; i <= numSnakeSections-1;i++){
                     game.physics.arcade.collide(snakeHead, snakeSection[i], collisionHandler, null, this);
             }
@@ -136,6 +141,12 @@
                         snakeSection[i].destroy();
                     }
                     bullets.destroy();
+                    snakeHead2.destroy();
+                    for (var i = 1; i <= numSnakeSections2-1; i++) {
+                        snakeSection2[i].destroy();
+                    }
+                    
+                    bullets2.destroy();
             var t = game.add.text(game.world.centerX,game.world.centerY, text, style);
             }else{
                 
