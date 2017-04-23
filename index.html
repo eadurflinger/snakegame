@@ -54,7 +54,8 @@
         var maxnumsections = 50;
         var newbodypart;
         var gameover = false;
-        var text = "GAME\n OVER";
+        var text = "Player 1\n Wins";
+        var text2 = "Player 2\n Wins";
         var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
         function create() {
                 //  Our bullet group
@@ -132,7 +133,7 @@
                 
             }
             for(var i = 1; i <= numSnakeSections-1;i++){
-                game.physics.arcade.collide(snakeHead, snakeSection[i], collisionHandler, null, this);
+                game.physics.arcade.collide(snakeHead, snakeSection[i], collisionHandlerP2Wins, null, this);
             }
             for(var i = 1; i <= numSnakeSections2-1;i++){
                 game.physics.arcade.collide(snakeHead2, snakeSection2[i], collisionHandler, null, this);
@@ -140,7 +141,7 @@
             //checks if player 1 hits player 2
             game.physics.arcade.collide(snakeHead, snakeHead2, collisionHandler, null, this);
             for(var i = 1; i <= numSnakeSections2-1;i++){
-                game.physics.arcade.collide(snakeHead, snakeSection2[i], collisionHandler, null, this);
+                game.physics.arcade.collide(snakeHead, snakeSection2[i], collisionHandlerP2Wins, null, this);
             }
             //checks if player 2 hits player 1
             for(var i = 1; i <= numSnakeSections2-1;i++){
@@ -161,7 +162,7 @@
                     }
                     
                     bullets2.destroy();
-            var t = game.add.text(game.world.centerX,game.world.centerY, text, style);
+            
             }else{
                 
                 snakeHead.body.velocity.setTo(0,0);
@@ -229,22 +230,28 @@
                    
                     game.stage.backgroundColor = '#992d2d';
                     gameover = true;
+                    var t = game.add.text(game.world.centerX,game.world.centerY, text2, style);
                    return;
                 }
                 if(snakeHead.y > 768 || snakeHead.y < 0) {
+                    
                     game.stage.backgroundColor = '#992d2d';
-                    gameover = true;       
+                    gameover = true;
+                    var t = game.add.text(game.world.centerX,game.world.centerY, text2, style);
                     return;
                 }
                 if(snakeHead2.x > 1280 || snakeHead2.x < 0) {
                    
                     game.stage.backgroundColor = '#992d2d';
                     gameover = true;
+                    var t = game.add.text(game.world.centerX,game.world.centerY, text, style);
                    return;
                 }
                 if(snakeHead2.y > 768 || snakeHead2.y < 0) {
+                    
                     game.stage.backgroundColor = '#992d2d';
-                    gameover = true;       
+                    gameover = true;
+                    var t = game.add.text(game.world.centerX,game.world.centerY, text, style);
                     return;
                 }
             }
@@ -261,10 +268,15 @@
         function collisionHandler (obj1, obj2) {
             game.stage.backgroundColor = '#992d2d';
             gameover = true;
-            game.stage.backgroundColor = '#992d2d';
-                    gameover = true;
-                    return;
+            return;
         }
+        
+        function collisionHandlerP2Wins (obj1, obj2) {
+            game.stage.backgroundColor = '#992d2d';
+            gameover = true;
+            return;
+        }
+        
         function collisionHandler2 (obj1, obj2) {
             pellet.x = game.world.randomX;
             pellet.y = game.world.randomY;
