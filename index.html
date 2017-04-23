@@ -25,17 +25,31 @@
             game.load.image('body','/Assests/body.png');
             game.load.image('bullet','/Assests/bullet.png');
             game.load.image('pellet','/Assests/pellet.png');
+            game.load.image('head2','/Assests/snakehead2.png');
+            game.load.image('body2','/Assests/body2.png');
+            game.load.image('bullet2','/Assests/bullet2.png');
         }
         
         var snakeHead;
+        var snakeHead2;
+        var snakeSection2 = new Array();
         var snakeSection = new Array();
         var snakePath = new Array();
+        var snakePath2 = new Array();
         var numSnakeSections = 4;
+        var numSnakeSections2 = 4;
         var snakeSpacer = 25;
         var speed = 200;
         var bullets;
+        var bullets2;
         var bulletTime = 0;
+        var bulletTime2 = 0;
         var fireButton;
+        var fireButton2;
+        var wbutton;
+        var sbutton;
+        var abutton;
+        var dbutton;
         var pellet;
         var maxnumsections = 50;
         var newbodypart;
@@ -52,17 +66,42 @@
             bullets.setAll('anchor.y', 1);
             bullets.setAll('outOfBoundsKill', true);
             bullets.setAll('checkWorldBounds', true);
-
-            
+            bullets2 = game.add.group();
+            bullets2.enableBody = true;
+            bullets2.physicsBodyType = Phaser.Physics.ARCADE;
+            bullets2.createMultiple(30, 'bullet');
+            bullets2.setAll('anchor.x', 0.5);
+            bullets2.setAll('anchor.y', 1);
+            bullets2.setAll('outOfBoundsKill', true);
+            bullets2.setAll('checkWorldBounds', true);
             game.physics.startSystem(Phaser.Physics.ARCADE);
             game.world.setBounds(0, 0, 1280, 768);
             cursors = game.input.keyboard.createCursorKeys();
             fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+            fireButton2 = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
+            wbutton = game.input.keyboard.addKey(Phaser.Keyboard.W);
+            abutton = game.input.keyboard.addKey(Phaser.Keyboard.A);
+            dbutton = game.input.keyboard.addKey(Phaser.Keyboard.D);
+            sbutton = game.input.keyboard.addKey(Phaser.Keyboard.S);
             snakeHead = game.add.sprite(640, 384, 'head');
+            snakeHead2 = game.add.sprite(800,600,'head2');
+            snakeHead2.anchor.setTo(0.5,0.5);
             snakeHead.anchor.setTo(0.5, 0.5);
             game.physics.enable(snakeHead, Phaser.Physics.ARCADE);
+            game.physics.enable(snakeHead2, Phaser.Physics.ARCADE);
             pellet = game.add.sprite(game.world.randomX, game.world.randomY, 'pellet');
             game.physics.enable(pellet,Phaser.Physics.ARCADE);
+            for (var i = 1; i <= numSnakeSections2-1; i++) {
+                var x = 800 + 25;
+                var y = 600;
+                if(snakeSection2.length != 0) {
+				    x = snakeSection2[snakeSection2.length-1].x +25;
+				   
+                }
+                snakeSection2[i] = game.add.sprite(x, y, 'body2');
+                snakeSection2[i].anchor.setTo(0.5, 0.5);
+                game.physics.enable(snakeSection2[i], Phaser.Physics.ARCADE);
+            }
             for (var i = 1; i <= numSnakeSections-1; i++) {
                 var x = 400 - 25;
                 var y = 300;
@@ -77,7 +116,13 @@
             for (var i = 0; i <= maxnumsections * snakeSpacer; i++) {
                 snakePath[i] = new Phaser.Point(640-i, 384);
             }
+            for (var i = 0; i <= maxnumsections * snakeSpacer; i++) {
+                snakePath2[i] = new Phaser.Point(800+i, 600);
+            }
             snakeHead.body.velocity.setTo(0,0);
+            snakeHead2.body.velocity.setTo(0,0);
+            snakeHead2.body.rotation = -180;
+            
         }
         
         function update() {
@@ -94,8 +139,11 @@
                     bullets.destroy();
             var t = game.add.text(game.world.centerX,game.world.centerY, text, style);
             }else{
+                
                 snakeHead.body.velocity.setTo(0,0);
                 snakeHead.body.angularVelocity = 0;
+                snakeHead2.body.velocity.setTo(0,0);
+                snakeHead2.body.angularVelocity = 0;
                 // check to see if snake head colides with the body
                
                 //check if snake hits pellet
@@ -108,7 +156,15 @@
                         snakeSection[i].x = (snakePath[i * snakeSpacer]).x;
                         snakeSection[i].y = (snakePath[i * snakeSpacer]).y;
                     }
-                //bug: will turn right even if current direction is left
+                snakeHead2.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead2.angle, speed));
+                    var part2 = snakePath2.pop();
+                    part2.setTo(snakeHead2.x, snakeHead2.y);
+                    snakePath2.unshift(part2);
+                    for (var i = 1; i <= numSnakeSections2 - 1; i++) {
+                        snakeSection2[i].x = (snakePath2[i * snakeSpacer]).x;
+                        snakeSection2[i].y = (snakePath2[i * snakeSpacer]).y;
+                    }
+                //movement turn for player 1
                 if (cursors.right.isDown & snakeHead.body.rotation != -180) {
                         snakeHead.body.rotation = 0;
                 }
@@ -123,6 +179,22 @@
 
                 if (cursors.up.isDown & snakeHead.body.rotation != 90){
                         snakeHead.body.rotation = -90;
+                }
+                //movement turn for player2
+                if (dbutton.isDown & snakeHead2.body.rotation != -180) {
+                        snakeHead2.body.rotation = 0;
+                }
+
+                if (sbutton.isDown & snakeHead2.body.rotation != -90) {
+                        snakeHead2.body.rotation = 90;
+                }
+
+                if (abutton.isDown & snakeHead2.body.rotation != 0) {
+                        snakeHead2.body.rotation = -180;
+                }
+
+                if (wbutton.isDown & snakeHead2.body.rotation != 90){
+                        snakeHead2.body.rotation = -90;
                 }
                 if (fireButton.isDown){
                     fireBullet();
