@@ -1,10 +1,19 @@
 <html>
 <head>
+    <title>Snake Game</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css" integrity="sha384-UQiGfs9ICog+LwheBSRCt1o5cbyKIHbwjWscjemyBMT9YCUMZffs6UqUTd0hObXD" crossorigin="anonymous">
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/grids-responsive-old-ie-min.css">
+        <![endif]-->
+        <!--[if gt IE 8]><!-->
+            <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/grids-responsive-min.css">
+        <!--<![endif]-->
     <script src="https://github.com/photonstorm/phaser-ce/releases/download/v2.7.7/phaser.js"></script>
 </head>
 <body>
-    hl
-    hl
     <div id="phaser-example"></div>
 </body>
     <script>
@@ -154,7 +163,7 @@
                 bullet.reset(snakeHead.x+25, snakeHead.y+8);
                 bullet.body.velocity.x = 400;
                 bulletTime = game.time.now + 200;
-                } 
+                }
             }
         }
 
