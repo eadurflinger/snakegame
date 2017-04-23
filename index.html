@@ -139,7 +139,7 @@
                 game.physics.arcade.collide(snakeHead2, snakeSection2[i], collisionHandler, null, this);
             }
             //checks if player 1 hits player 2
-            game.physics.arcade.collide(snakeHead, snakeHead2, collisionHandler, null, this);
+            game.physics.arcade.collide(snakeHead, snakeHead2, collisionHandlerNoOneWins, null, this);
             for(var i = 1; i <= numSnakeSections2-1;i++){
                 game.physics.arcade.collide(snakeHead, snakeSection2[i], collisionHandlerP2Wins, null, this);
             }
@@ -276,6 +276,13 @@
             game.stage.backgroundColor = '#992d2d';
             gameover = true;
             var t = game.add.text(game.world.centerX,game.world.centerY, text2, style);
+            return;
+        }
+        
+        function collisionHandlerNoOneWins (obj1, obj2) {
+            game.stage.backgroundColor = '#992d2d';
+            gameover = true;
+            var t = game.add.text(game.world.centerX,game.world.centerY, "Tie \nGame", style);
             return;
         }
         
