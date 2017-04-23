@@ -171,6 +171,8 @@
                
                 //check if snake hits pellet
                     game.physics.arcade.collide(snakeHead, pellet, collisionHandler2, null, this);
+                //check if snake2 hits pellet
+                    game.physics.arcade.collide(snakeHead2, pellet, collisionHandler3, null, this);
                     snakeHead.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead.angle, speed));
                     var part = snakePath.pop();
                     part.setTo(snakeHead.x, snakeHead.y);
@@ -261,6 +263,14 @@
             snakeSection[numSnakeSections].anchor.setTo(0.5, 0.5);
             game.physics.enable(snakeSection[numSnakeSections], Phaser.Physics.ARCADE);
             numSnakeSections++;
+        }
+        function collisionHandler3 (obj1, obj2) {
+            pellet.x = game.world.randomX;
+            pellet.y = game.world.randomY;
+            snakeSection2[numSnakeSections2] = game.add.sprite(snakeSection2[ numSnakeSections2-1].x, snakeSection2[ numSnakeSections2-1].y, 'body2');
+            snakeSection2[numSnakeSections2].anchor.setTo(0.5, 0.5);
+            game.physics.enable(snakeSection2[numSnakeSections2], Phaser.Physics.ARCADE);
+            numSnakeSections2++;
         }
         function fireBullet () {
         //  To avoid them being allowed to fire too fast we set a time limit
