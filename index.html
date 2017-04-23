@@ -31,10 +31,10 @@
             game.physics.enable(snakeHead, Phaser.Physics.ARCADE);
             
             for (var i = 1; i <= numSnakeSections-1; i++) {
-                var x = 400 - snakeSpacer;
+                var x = 400 - 25;
                 var y = 300;
                 if(snakeSection.length != 0) {
-				    x = snakeSection[snakeSection.length-1].x - snakeSpacer;
+				    x = snakeSection[snakeSection.length-1].x -25;
 				   
                 }
                 snakeSection[i] = game.add.sprite(x, y, 'body');
